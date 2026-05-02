@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36930.0 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "proiectPAW-gestiune-resurse-umane", "proiectPAW-gestiune-resurse-umane\proiectPAW-gestiune-resurse-umane.csproj", "{CBFEBBCF-58ED-4EC1-A8B3-06AF28D6007B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CBFEBBCF-58ED-4EC1-A8B3-06AF28D6007B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBFEBBCF-58ED-4EC1-A8B3-06AF28D6007B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBFEBBCF-58ED-4EC1-A8B3-06AF28D6007B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBFEBBCF-58ED-4EC1-A8B3-06AF28D6007B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {159C5CF1-AD54-450C-A925-F67B6E06B280}
+	EndGlobalSection
+EndGlobal
