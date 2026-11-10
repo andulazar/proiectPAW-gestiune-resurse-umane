@@ -33,5 +33,10 @@ namespace proiectPAW_gestiune_resurse_umane
 
 
         public course() { }
+
+        public override string ToString()
+        {
+            return $"{courseName} - {numberOfhours} hours";
+        }
     }
 }

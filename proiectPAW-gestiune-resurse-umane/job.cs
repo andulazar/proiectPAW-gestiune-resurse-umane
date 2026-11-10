@@ -30,6 +30,11 @@ namespace proiectPAW_gestiune_resurse_umane
 
         public job() { }
 
+        public override string ToString()
+        {
+            return $"{jobName} ({salary} RON)";
+        }
+
     }
 }
 

@@ -48,27 +48,30 @@
             this.label10 = new System.Windows.Forms.Label();
             this.listBoxCourses = new System.Windows.Forms.ListBox();
             this.btnAddCourse = new System.Windows.Forms.Button();
+            this.btnRemoveCourse = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tbFullName
             // 
             this.tbFullName.Location = new System.Drawing.Point(83, 117);
             this.tbFullName.Name = "tbFullName";
-            this.tbFullName.Size = new System.Drawing.Size(100, 20);
+            this.tbFullName.Size = new System.Drawing.Size(200, 20);
             this.tbFullName.TabIndex = 0;
             // 
             // tbCnp
             // 
             this.tbCnp.Location = new System.Drawing.Point(83, 164);
             this.tbCnp.Name = "tbCnp";
-            this.tbCnp.Size = new System.Drawing.Size(100, 20);
+            this.tbCnp.Size = new System.Drawing.Size(200, 20);
+            this.tbCnp.MaxLength = 13;
             this.tbCnp.TabIndex = 1;
             // 
             // tbJobName
             // 
             this.tbJobName.Location = new System.Drawing.Point(364, 117);
             this.tbJobName.Name = "tbJobName";
-            this.tbJobName.Size = new System.Drawing.Size(100, 20);
+            this.tbJobName.Size = new System.Drawing.Size(150, 20);
             this.tbJobName.TabIndex = 2;
             // 
             // dtpBirthDate
@@ -82,18 +85,18 @@
             // 
             this.tbSalary.Location = new System.Drawing.Point(364, 164);
             this.tbSalary.Name = "tbSalary";
-            this.tbSalary.Size = new System.Drawing.Size(100, 20);
+            this.tbSalary.Size = new System.Drawing.Size(150, 20);
             this.tbSalary.TabIndex = 4;
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(497, 464);
+            this.btnSave.Location = new System.Drawing.Point(430, 464);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(119, 38);
             this.btnSave.TabIndex = 5;
-            this.btnSave.Text = "save";
+            this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.button1_Click);
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // label1
             // 
@@ -147,7 +150,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(36, 13);
             this.label6.TabIndex = 11;
-            this.label6.Text = "Salary";
+            this.label6.Text = "Salary (RON)";
             // 
             // label7
             // 
@@ -166,23 +169,20 @@
             this.label8.Size = new System.Drawing.Size(96, 13);
             this.label8.TabIndex = 13;
             this.label8.Text = "Courses graduated";
-            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // tbCourseName
             // 
             this.tbCourseName.Location = new System.Drawing.Point(582, 117);
             this.tbCourseName.Name = "tbCourseName";
-            this.tbCourseName.Size = new System.Drawing.Size(100, 20);
+            this.tbCourseName.Size = new System.Drawing.Size(150, 20);
             this.tbCourseName.TabIndex = 14;
-            this.tbCourseName.TextChanged += new System.EventHandler(this.textBox5_TextChanged);
             // 
             // tbCourseHours
             // 
             this.tbCourseHours.Location = new System.Drawing.Point(582, 164);
             this.tbCourseHours.Name = "tbCourseHours";
-            this.tbCourseHours.Size = new System.Drawing.Size(100, 20);
+            this.tbCourseHours.Size = new System.Drawing.Size(150, 20);
             this.tbCourseHours.TabIndex = 15;
-            this.tbCourseHours.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
             // 
             // label9
             // 
@@ -192,7 +192,6 @@
             this.label9.Size = new System.Drawing.Size(69, 13);
             this.label9.TabIndex = 16;
             this.label9.Text = "Course name";
-            this.label9.Click += new System.EventHandler(this.label9_Click);
             // 
             // label10
             // 
@@ -202,7 +201,6 @@
             this.label10.Size = new System.Drawing.Size(69, 13);
             this.label10.TabIndex = 17;
             this.label10.Text = "Course hours";
-            this.label10.Click += new System.EventHandler(this.label10_Click);
             // 
             // listBoxCourses
             // 
@@ -211,7 +209,7 @@
             this.listBoxCourses.Name = "listBoxCourses";
             this.listBoxCourses.Size = new System.Drawing.Size(310, 134);
             this.listBoxCourses.TabIndex = 18;
-            this.listBoxCourses.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
+            this.listBoxCourses.SelectedIndexChanged += new System.EventHandler(this.listBoxCourses_SelectedIndexChanged);
             // 
             // btnAddCourse
             // 
@@ -219,15 +217,41 @@
             this.btnAddCourse.Name = "btnAddCourse";
             this.btnAddCourse.Size = new System.Drawing.Size(102, 25);
             this.btnAddCourse.TabIndex = 19;
-            this.btnAddCourse.Text = "add course";
+            this.btnAddCourse.Text = "Add course";
             this.btnAddCourse.UseVisualStyleBackColor = true;
             this.btnAddCourse.Click += new System.EventHandler(this.btnAddCourse_Click);
             // 
-            // Form1
+            // btnRemoveCourse
             // 
+            this.btnRemoveCourse.Enabled = false;
+            this.btnRemoveCourse.Location = new System.Drawing.Point(785, 245);
+            this.btnRemoveCourse.Name = "btnRemoveCourse";
+            this.btnRemoveCourse.Size = new System.Drawing.Size(140, 25);
+            this.btnRemoveCourse.TabIndex = 20;
+            this.btnRemoveCourse.Text = "Remove selected course";
+            this.btnRemoveCourse.UseVisualStyleBackColor = true;
+            this.btnRemoveCourse.Click += new System.EventHandler(this.btnRemoveCourse_Click);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(565, 464);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(119, 38);
+            this.btnCancel.TabIndex = 21;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // Formemployee
+            // 
+            this.AcceptButton = this.btnSave;
+            this.CancelButton = this.btnCancel;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1155, 553);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.btnRemoveCourse);
             this.Controls.Add(this.btnAddCourse);
             this.Controls.Add(this.listBoxCourses);
             this.Controls.Add(this.label10);
@@ -248,9 +272,12 @@
             this.Controls.Add(this.tbJobName);
             this.Controls.Add(this.tbCnp);
             this.Controls.Add(this.tbFullName);
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "Formemployee";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Employee";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -278,6 +305,8 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ListBox listBoxCourses;
         private System.Windows.Forms.Button btnAddCourse;
+        private System.Windows.Forms.Button btnRemoveCourse;
+        private System.Windows.Forms.Button btnCancel;
     }
 }
 
