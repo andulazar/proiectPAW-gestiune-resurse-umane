@@ -1,131 +1,162 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace proiectPAW_gestiune_resurse_umane
 {
     public partial class Formemployee : Form
     {
-        employee localEmployee;
-        public Formemployee()
+        private static int nextJobId = 1;
+
+        private readonly employee localEmployee;
+
+        public Formemployee() : this(new employee(), false)
         {
-            InitializeComponent();
-            localEmployee = new employee();
         }
+
         public Formemployee(employee _localEmployee, bool modificare = false)
         {
             InitializeComponent();
             localEmployee = _localEmployee;
+            dtpBirthDate.MaxDate = DateTime.Today;
 
             if (modificare)
             {
+                Text = "Edit employee";
                 tbFullName.Text = localEmployee.fullName;
                 tbCnp.Text = localEmployee.cNP;
-                dtpBirthDate.Value = localEmployee.birthDate;
+                if (localEmployee.birthDate >= dtpBirthDate.MinDate && localEmployee.birthDate <= dtpBirthDate.MaxDate)
+                    dtpBirthDate.Value = localEmployee.birthDate;
 
                 if (localEmployee.myjob != null)
                 {
                     tbJobName.Text = localEmployee.myjob.jobName;
-                    tbSalary.Text = localEmployee.myjob.salary.ToString();
-                }
-
-                if (localEmployee.coursesCompleted != null)
-                {
-                    foreach (course c in localEmployee.coursesCompleted)
-                    {
-                        listBoxCourses.Items.Add($"{c.courseName} - {c.numberOfhours} ore");
-                    }
+                    tbSalary.Text = localEmployee.myjob.salary.ToString(CultureInfo.CurrentCulture);
                 }
             }
+            else
+            {
+                Text = "Add employee";
+                dtpBirthDate.Value = DateTime.Today.AddYears(-18);
+            }
+
+            RefreshCourses();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void RefreshCourses()
         {
-
-        }
-
-        private void label8_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label10_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label9_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox6_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox5_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+            listBoxCourses.Items.Clear();
+            foreach (course c in localEmployee.coursesCompleted)
+            {
+                listBoxCourses.Items.Add(c);
+            }
+            btnRemoveCourse.Enabled = listBoxCourses.SelectedIndex >= 0;
         }
 
         private void btnAddCourse_Click(object sender, EventArgs e)
         {
-            try
+            string numeCurs = tbCourseName.Text.Trim();
+            if (string.IsNullOrWhiteSpace(numeCurs))
             {
-                string numeCurs = tbCourseName.Text;
-                int oreCurs = int.Parse(tbCourseHours.Text);
-
-                if (string.IsNullOrWhiteSpace(numeCurs))
-                {
-                    MessageBox.Show("Te rog introdu numele cursului!");
-                    return; 
-                }
-
-                course cursNou = new course(numeCurs, oreCurs, 100);
-
-                localEmployee.coursesCompleted.Add(cursNou);
-
-                listBoxCourses.Items.Add($"{cursNou.courseName} - {cursNou.numberOfhours} ore");
-
-                tbCourseName.Clear();
-                tbCourseHours.Clear();
+                MessageBox.Show("Please enter the course name!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                tbCourseName.Focus();
+                return;
             }
-            catch (FormatException)
+
+            if (!int.TryParse(tbCourseHours.Text.Trim(), out int oreCurs) || oreCurs <= 0)
             {
-                MessageBox.Show("Numărul de ore trebuie să fie un număr valid!", "Eroare");
+                MessageBox.Show("The number of hours must be a positive whole number!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                tbCourseHours.Focus();
+                return;
+            }
+
+            int newId = localEmployee.coursesCompleted.Count == 0
+                ? 1
+                : localEmployee.coursesCompleted.Max(c => c.courseId) + 1;
+
+            localEmployee.coursesCompleted.Add(new course(numeCurs, oreCurs, newId));
+            RefreshCourses();
+
+            tbCourseName.Clear();
+            tbCourseHours.Clear();
+            tbCourseName.Focus();
+        }
+
+        private void btnRemoveCourse_Click(object sender, EventArgs e)
+        {
+            if (listBoxCourses.SelectedItem is course selected)
+            {
+                localEmployee.coursesCompleted.Remove(selected);
+                RefreshCourses();
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void listBoxCourses_SelectedIndexChanged(object sender, EventArgs e)
         {
-            try
-            {
-                localEmployee.fullName = tbFullName.Text;
-                localEmployee.cNP = tbCnp.Text;
-                localEmployee.birthDate = dtpBirthDate.Value;
+            btnRemoveCourse.Enabled = listBoxCourses.SelectedIndex >= 0;
+        }
 
-                double salariu = double.Parse(tbSalary.Text);
-                localEmployee.myjob = new job(tbJobName.Text, salariu, 1);
+        private static bool IsValidCnp(string cnp)
+        {
+            return cnp.Length == 13 && cnp.All(char.IsDigit);
+        }
 
-                this.DialogResult = DialogResult.OK;
-            }
-            catch (Exception ex)
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            string fullName = tbFullName.Text.Trim();
+            string cnp = tbCnp.Text.Trim();
+            string jobName = tbJobName.Text.Trim();
+            string salaryText = tbSalary.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(fullName))
             {
-                MessageBox.Show("Te rog verifică datele introduse. Salariul trebuie să fie valid.\n" + ex.Message, "Eroare");
-                this.DialogResult = DialogResult.None;
+                MessageBox.Show("Please enter the full name!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                tbFullName.Focus();
+                return;
             }
+
+            if (!IsValidCnp(cnp))
+            {
+                MessageBox.Show("The CNP must contain exactly 13 digits!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                tbCnp.Focus();
+                return;
+            }
+
+            job newJob = null;
+            if (jobName.Length > 0 || salaryText.Length > 0)
+            {
+                if (jobName.Length == 0)
+                {
+                    MessageBox.Show("Please enter the job name!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    tbJobName.Focus();
+                    return;
+                }
+
+                if (!double.TryParse(salaryText, NumberStyles.Number, CultureInfo.CurrentCulture, out double salariu) || salariu <= 0)
+                {
+                    MessageBox.Show("The salary must be a positive number!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    tbSalary.Focus();
+                    return;
+                }
+
+                int jobId = localEmployee.myjob != null ? localEmployee.myjob.jobId : nextJobId++;
+                newJob = new job(jobName, salariu, jobId);
+            }
+
+            localEmployee.fullName = fullName;
+            localEmployee.cNP = cnp;
+            localEmployee.birthDate = dtpBirthDate.Value.Date;
+            localEmployee.myjob = newJob;
+
+            DialogResult = DialogResult.OK;
+            Close();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
     }
 }
